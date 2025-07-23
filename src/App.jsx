@@ -26,12 +26,19 @@ function generateAllDice() {
 
 
 function rollDice() {
-  setDice(prevDice => prevDice.map(dice =>
-    dice.isHeld ?
-    dice :
-    {...dice, value: Math.ceil(Math.random() * 6)}
-  ))
+  if(!gameWon){
+      setDice(prevDice => prevDice.map(dice =>
+      dice.isHeld ?
+      dice :
+      {...dice, value: Math.ceil(Math.random() * 6)}
+    ))
+  }else{
+    setDice(generateAllDice())
+  }
 }
+
+const gameWon = dice.every(die => die.isHeld) &&
+                dice.every(die => die.value === dice[0].value)
 
 const dieElements = dice.map(dieObj => {
     return <Die
@@ -53,7 +60,7 @@ const dieElements = dice.map(dieObj => {
         {dieElements}
       </div>
 
-      <button className="dice-btn" onClick={rollDice}>Roll</button>
+      <button className="dice-btn" onClick={rollDice}>{gameWon ? "New Game" : "Roll"}</button>
     </main>
   )
 }
